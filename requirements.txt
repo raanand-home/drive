@@ -1,0 +1,4 @@
+Django==1.7.4
+python-dateutil==2.4.1
+pytz
+django-bootstrap3==5.2.0

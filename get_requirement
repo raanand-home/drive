@@ -1,0 +1,3 @@
+#!/bin/bash
+[ -f requirements.txt ] && pip install -r requirements.txt
+[ -f db_requirements.txt ] && pip install -r db_requirements.txt

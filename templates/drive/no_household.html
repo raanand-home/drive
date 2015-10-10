@@ -1,0 +1,24 @@
+{% extends 'drive/base.html' %}
+
+{% block title %}
+    household
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Your account isn't associated with a household.</h1>
+            <form method="post" action="{% url 'drive:join_request' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="household">Household name:</label>
+                    <input name="household" type="text" class="form-control" id="household"/>
+                </div>
+                <button type="submit" name="action" value="join" class="btn btn-default">Join</button>
+                <button type="submit" name="action" value="create" class="btn btn-default">Create</button>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'drive/base.html' %}
+
+{% block title %}
+    register
+{% endblock %}
+
+{% block content %}
+
+    <h1>Register with Drive</h1>
+    <form id="user_form" method="post" action={% url 'drive:register' %}
+            enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        Username: <input type="text" name="username" value="" size="50" />
+        <br />
+        Password: <input type="password" name="password" value="" size="50" />
+        <br />
+        Password verification: <input type="password" name="password_ver" value="" size="50" />
+        <br />
+        Email: <input type="email" name="email" value="" />
+        <br />
+        Nickname: <input type="text" name="nickname" value="" />
+        <br />
+
+
+        <input type="submit" name="submit" value="Register" />
+    </form>
+
+{% endblock %}

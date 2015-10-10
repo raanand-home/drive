@@ -1,0 +1,146 @@
+{% extends 'drive/base.html' %}
+
+{% block title %}
+    household
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ screen_lock_user.household.name }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Caretakers <small><span class="badge">{{ caretakers|length }}</span></small></h2>
+            <table class="table">
+                <thead>
+                    <th>Nickname</th>
+                    <th>Email</th>
+                    <!--{% if screen_lock_user.caretaker %}
+                        <th>Actions</th>
+                    {% endif %}-->
+                </thead>
+                {% for c in caretakers %}
+                    <tr{% ifequal c.nickname screen_lock_user.nickname %} class="success"{% endifequal %}>
+                        <td>{{ c.nickname }}</td>
+                        <td>{{ c.user.email}}</td>
+                        <!--{% if screen_lock_user.caretaker %}
+                            <td class="warning">
+                                TBD
+                            </td>
+                        {% endif %}-->
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Children <small><span class="badge">{{ children|length }}</span></small></h2>
+            {% if children|length %}
+                <table class="table">
+                    <thead>
+                        <th>Nickname</th>
+                        <th>Email</th>
+                        <th>Credits</th>
+                        <!--{% if screen_lock_user.caretaker %}
+                            <th>Actions</th>
+                        {% endif %}-->
+                    </thead>
+                    {% for c in children %}
+                        <tr{% ifequal c.nickname screen_lock_user.nickname %} class="success"{% endifequal %}>
+                            <td>{{ c.nickname }}</td>
+                            <td>{{ c.user.email }}</td>
+                            <td>{{ c.credits }}</td>
+                            <!--{% if screen_lock_user.caretaker %}
+                                <td class="warning">
+                                    TBD
+                                </td>
+                            {% endif %}-->
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Boxes <small><span class="badge">{{ boxes|length }}</span></small></h2>
+            {% if boxes|length %}
+                <table class="table">
+                    <thead>
+                        <th>MAC</th>
+                        <th>Alias</th>
+                        <th>Status</th>
+                        <th>Control</th>
+                    </thead>
+                    {% for b in boxes %}
+                        <tr>
+                            <td>{{ b.box.mac }}</td>
+                            <td>{{ b.alias }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button disabled class="btn {% if b.box.status %} btn-success {% endif %}">Active <span class="glyphicon glyphicon-ok-sign"></span></button>
+                                    <button disabled class="btn {% if not b.box.status %} btn-danger {% endif %}">Inactive <span class="glyphicon glyphicon-remove-sign"></span></button>
+                                </div>
+                            </td>
+                            <td>
+                                {% if screen_lock_user.caretaker %}
+                                <form method="post" action="{% url 'drive:box_control' %}">
+                                    {% csrf_token %}
+                                    <div class="btn-group">
+                                        <button type="submit" name="action" value="enable" class="btn {% if b.box.control %} btn-success {% endif %}">Enable <span class="glyphicon glyphicon-ok-sign"></span></button>
+                                        <button type="submit" name="action" value="disable" class="btn {% if not b.box.control %} btn-danger {% endif %}">Disable <span class="glyphicon glyphicon-remove-sign"></span></button>
+                                    </div>
+                                    <input type="hidden" name="box" value="{{ b.box.mac }}"/>
+                                </form>
+                                {% else %}
+                                    <div class="btn-group">
+                                        <button disabled class="btn {% if b.box.control %} btn-success {% endif %}">Enable <span class="glyphicon glyphicon-ok-sign"></span></button>
+                                        <button disabled class="btn {% if not b.box.control %} btn-danger {% endif %}">Disable <span class="glyphicon glyphicon-remove-sign"></span></button>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+    {% if screen_lock_user.caretaker %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Join requests <small><span class="badge">{{ join_requests|length }}</span></small></h2>
+                {% if join_requests|length %}
+                    <table class="table">
+                        <thead>
+                            <th>Nickname</th>
+                            <th>email</th>
+                            <th>Caretaker/Child</th>
+                            <th>Action</th>
+                        </thead>
+                        {% for r in join_requests %}
+                            <tr>
+                                <td>{{ r.nickname }}</td>
+                                <td>{{ r.user.email }}</td>
+                                <td>{% if r.caretaker %}Caretaker{% else %}Child{% endif %}</td>
+                                <td>
+                                    <form method="post" action="{% url 'drive:join_reply' %}">
+                                        {% csrf_token %}
+                                        <div class="btn-group">
+                                            <button type="submit" name="action" value="accept" class="btn btn-success">Accept <span class="glyphicon glyphicon-ok"></span></button>
+                                            <button type="submit" name="action" value="reject" class="btn btn-danger">Reject <span class="glyphicon glyphicon-remove"></span></button>
+                                        </div>
+                                        <input type="hidden" name="requesting_user_pk" value="{{ r.pk }}"/>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

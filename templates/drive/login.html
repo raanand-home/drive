@@ -1,0 +1,19 @@
+{% extends 'drive/base.html' %}
+
+{% block title %}
+    login
+{% endblock %}
+
+{% block content %}
+
+    <form id="login_form" method="post" action={% url 'drive:login' %}?next={{ next }}>
+        {% csrf_token %}
+        Username: <input type="text" name="username" value="" size="50" />
+        <br />
+        Password: <input type="password" name="password" value="" size="50" />
+        <br />
+
+        <input type="submit" value="submit" />
+    </form>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'drive/base.html' %}
+
+{% block title %}
+    home
+{% endblock %}
+
+{% block content %}
+
+    {% if user and user.is_authenticated %}
+        <div class="jumbotron">
+            <h1>ScreenLock user overview</h1>
+            <p>Contents TBD...</p>
+        </div>
+    {% endif %}
+
+{% endblock %}
